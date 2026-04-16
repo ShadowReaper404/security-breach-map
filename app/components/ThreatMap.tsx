@@ -37,7 +37,7 @@ export default function ThreatMap() {
           }
         </Geographies>
 
-        {threats.map((threat: any, index: number) => {
+        {Array.isArray(threats) && threats.map((threat: any, index: number) => {
           const coords = countryCoords[threat.country];
           if (!coords) return null; // Skip if we don't have coords for that country
 
