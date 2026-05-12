@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 
 const ATTACK_TYPES = ['DDoS', 'Brute Force', 'Port Scan', 'SQL Injection', 'Phishing', 'Ransomware', 'Zero-Day'];
-const SEVERITIES = ['critical', 'high', 'medium', 'low'] as const;
+type Severity = 'critical' | 'high' | 'medium' | 'low';
+const SEVERITIES: Severity[] = ['critical', 'high', 'medium', 'low'];
 const COUNTRIES = ['US', 'CN', 'RU', 'IN', 'GB', 'DE', 'FR', 'BR', 'JP', 'KR', 'AU', 'CA', 'IT', 'ES', 'NL', 'TR', 'SA', 'AE', 'SG', 'ID', 'PH', 'VN', 'TH', 'UA', 'PL', 'RO'];
 
 function randomItem<T>(arr: T[]): T {
@@ -43,10 +44,10 @@ export async function GET() {
 
     if (dataArray.length === 0) throw new Error('Empty data');
 
-    const threats = dataArray.slice(0, 60).map((item: any, i: number) => ({
+    const threats = dataArray.slice(0, 60).map((item: { source?: string; reports?: string }, i: number) => ({
       id: `threat-${item.source || i}-${i}`,
       ip: item.source || randomIp(),
-      count: parseInt(item.reports) || randomInt(10, 5000),
+      count: parseInt(item.reports ?? "", 10) || randomInt(10, 5000),
       country: randomItem(COUNTRIES),
       attackType: randomItem(ATTACK_TYPES),
       severity: randomItem(SEVERITIES),
